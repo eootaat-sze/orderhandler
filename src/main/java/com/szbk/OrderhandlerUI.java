@@ -1,7 +1,9 @@
 package com.szbk;
 
 import com.szbk.Controller.CustomerController;
+import com.szbk.Controller.LaborUserController;
 import com.szbk.Controller.OrderController;
+import com.szbk.Model.Entity.LaborUser;
 import com.szbk.View.LoginWindow;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -24,13 +26,18 @@ public class OrderhandlerUI extends UI {
     @Autowired
     OrderController orderController;
 
+    @Autowired
+    LaborUserController laborUserController;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         //Navigator navigator = new Navigator(this, this);
         //navigator.addView("customerUI", CustomerUI.class);
-        loginWindow = new LoginWindow(customerController, orderController);
+        loginWindow = new LoginWindow(customerController, orderController, laborUserController);
         setupWelcomeScreen();
         addWindow(loginWindow);
+
+        laborUserController.registration(new LaborUser("dante", "test@test.com", "dante"));
 
         //navigator = new Navigator(this, this);
         //showLoginWindow();

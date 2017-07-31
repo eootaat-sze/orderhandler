@@ -2,6 +2,7 @@ package com.szbk.Controller;
 
 import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.CustomerRepository;
+import com.szbk.Model.Entity.User;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,13 @@ public class CustomerController {
         }
     }
 
-    public Customer login(Customer c) {
+    public Customer login(User u) {
         List<Customer> customers = repo.findAll();
 
         //If, in the database, there is the given email and password, then it is okay, if not, something is wrong.
         for (Customer customer : customers) {
-            if (customer.getEmail().equals(c.getEmail())) {
-                if (customer.getPassword().equals(c.getPassword())) {
+            if (customer.getEmail().equals(u.getEmail())) {
+                if (customer.getPassword().equals(u.getPassword())) {
 //                    System.out.println("controller - customer: " + customer);
                     return customer;
                 }

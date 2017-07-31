@@ -1,6 +1,7 @@
 package com.szbk.View.customer;
 
 import com.szbk.Controller.CustomerController;
+import com.szbk.Controller.LaborUserController;
 import com.szbk.Controller.OrderController;
 import com.szbk.OrderhandlerUI;
 import com.szbk.View.LoginWindow;
@@ -10,6 +11,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -21,10 +23,12 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
     VerticalLayout descriptionTextLayout;
     CustomerController customerController;
     OrderController orderController;
+    LaborUserController laborUserController;
 
-    public CustomerUI(CustomerController customerController, OrderController orderController) {
+    public CustomerUI(CustomerController customerController, OrderController orderController, LaborUserController laborUserController) {
         this.customerController = customerController;
         this.orderController = orderController;
+        this.laborUserController = laborUserController;
 
         setSplitPosition(18f, Unit.PERCENTAGE);
         setLocked(true);
@@ -70,7 +74,7 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
         logoutButton.addStyleName(ValoTheme.MENU_ITEM);
         logoutButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         logoutButton.addClickListener(e -> {
-            getUI().addWindow(new LoginWindow(getCustomerController(), getOrderController()));
+            getUI().addWindow(new LoginWindow(getCustomerController(), getOrderController(), getLaborUserController()));
             ((OrderhandlerUI) getUI()).setupWelcomeScreen();
         });
 
@@ -85,6 +89,10 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
 
     public OrderController getOrderController() {
         return this.orderController;
+    }
+
+    public LaborUserController getLaborUserController() {
+        return this.laborUserController;
     }
 
     @Override

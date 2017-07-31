@@ -28,3 +28,5 @@ CREATE TABLE IF NOT EXISTS LaborUser(
 
 -- INSERT INTO Customer(id, customerName, password, email, groupName, companyName)
 -- VALUES (0, "testUser", "testUser", "testUser@a.com", "testGroup","testCompany");
+INSERT INTO LaborUser(id, name, email, password)
+VALUES (0, 'dante', 'test@test.com', 'dante')

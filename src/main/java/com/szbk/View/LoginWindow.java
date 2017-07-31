@@ -1,9 +1,11 @@
 package com.szbk.View;
 
 import com.szbk.Controller.CustomerController;
+import com.szbk.Controller.LaborUserController;
 import com.szbk.Controller.OrderController;
 import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.LaborUser;
+import com.szbk.Model.Entity.User;
 import com.szbk.View.customer.CustomerUI;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
@@ -14,6 +16,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.Position;
+import com.vaadin.spring.VaadinNavigatorConfiguration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -24,17 +27,19 @@ import com.vaadin.ui.themes.ValoTheme;
 public class LoginWindow extends Window implements View {
     CustomerController customerController;
     OrderController orderController;
-    private Binder<Customer> dataBinder;
+    LaborUserController laborUserController;
+    private Binder<User> dataBinder;
 
     private HorizontalLayout layout;
     private VerticalLayout mainLayout;
     private TextField email;
     private PasswordField password;
 
-    public LoginWindow(CustomerController controller, OrderController orderController) {
+    public LoginWindow(CustomerController controller, OrderController orderController, LaborUserController laborUserController) {
         this.customerController = controller;
         this.orderController = orderController;
-        dataBinder = new Binder<>(Customer.class);
+        this.laborUserController = laborUserController;
+        dataBinder = new Binder<>(User.class);
 
         //It contains the two textfields and the login button.
         layout = new HorizontalLayout();
@@ -64,10 +69,10 @@ public class LoginWindow extends Window implements View {
         Button registrationButton = new Button("Regisztráció");
         email = new TextField();
         dataBinder.forField(email).withValidator(new EmailValidator("Ez nem valid email cím!"))
-                .bind(Customer::getEmail, Customer::setEmail);
+                .bind(User::getEmail, User::setEmail);
 
         password = new PasswordField();
-        dataBinder.forField(password).bind(Customer::getPassword, Customer::setPassword);
+        dataBinder.forField(password).bind(User::getPassword, User::setPassword);
 
         //A notification which appears when I click any button (in development)
         Notification demoNotification = new Notification("");
@@ -77,10 +82,21 @@ public class LoginWindow extends Window implements View {
         loginButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addClickListener(e -> {
-            Customer customer = new Customer();
+            User user = new User();
 
-            if (validateCustomer(customer)) {
-                Customer c = customerController.login(customer);
+            if (validateUser(user)) {
+                Customer c = null;
+                LaborUser lb = laborUserController.login(user);
+
+                if (lb != null) {
+                    VaadinSession.getCurrent().setAttribute("laborUserName", lb.getName());
+                    VaadinSession.getCurrent().setAttribute("email", lb.getEmail());
+                    VaadinSession.getCurrent().setAttribute("id", lb.getId());
+                    System.out.println("It's workign");
+                } else {
+                    c = customerController.login(user);
+                }
+
                 if (c != null) {
                     clearFields();
 //                    getSession().setAttribute("customerName", c.getCustomerName());
@@ -91,12 +107,11 @@ public class LoginWindow extends Window implements View {
                     VaadinSession.getCurrent().setAttribute("groupName", c.getGroupName());
                     VaadinSession.getCurrent().setAttribute("companyName", c.getCompanyName());
                     VaadinSession.getCurrent().setAttribute("id", c.getId());
-                    getUI().setContent(new CustomerUI(customerController, orderController));
+                    //TODO Do something with it! It is not okay to pass the laborUserController to the customerUI. I don't need that there.
+                    getUI().setContent(new CustomerUI(customerController, orderController, laborUserController));
                     getUI().removeWindow(this);
                 //Some action, like the validateCustomer method, to validate a non-customer user (so a laborUser)
-                } else if (true) {
-
-                } else {
+                } else if (lb == null) {
                     notification.show(getUI().getPage());
                 }
             }
@@ -121,10 +136,10 @@ public class LoginWindow extends Window implements View {
         setContent(mainLayout);
     }
 
-    private boolean validateCustomer(Customer customer) {
+    private boolean validateUser(User user) {
         try {
-            dataBinder.writeBean(customer);
-            System.out.println("customer: " + customer);
+            dataBinder.writeBean(user);
+            System.out.println("user: " + user);
             return true;
         } catch(ValidationException e) {
             Notification notification = new Notification("Ellenőrizze a hibaüzeneteket az egyes mezők mellett!");

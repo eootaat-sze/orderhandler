@@ -23,6 +23,12 @@ public class LaborUser {
         this.password = password;
     }
 
+    public LaborUser(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     public long getId() {
         return this.id;
     }
