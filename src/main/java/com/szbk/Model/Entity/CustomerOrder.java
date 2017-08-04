@@ -25,6 +25,18 @@ public class CustomerOrder {
 
     public CustomerOrder() {}
 
+    public CustomerOrder(String customerName, String groupName, String companyName, String sequence, double scale,
+                         String purification, String type, LocalDate orderDate) {
+        this.customerName = customerName;
+        this.groupName = groupName;
+        this.companyName = companyName;
+        this.sequence = sequence;
+        this.scale = scale;
+        this.purification = purification;
+        this.type = type;
+        this.orderDate = orderDate;
+    }
+
     public String getCustomerName() {
         return this.customerName;
     }

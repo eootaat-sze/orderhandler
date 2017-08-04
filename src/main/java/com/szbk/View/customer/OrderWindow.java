@@ -15,9 +15,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.io.OutputStream;
 import java.time.LocalDate;
 
-/**
- * Created by dante on 2017.05.09..
- */
 public class OrderWindow extends VerticalLayout {
     public static final String REQUIRED = "A mező kitöltése kötelező";
     Button simpleOrder;

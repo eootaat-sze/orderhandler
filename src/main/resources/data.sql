@@ -27,6 +27,13 @@ CREATE TABLE IF NOT EXISTS LaborUser(
 );
 
 -- INSERT INTO Customer(id, customerName, password, email, groupName, companyName)
--- VALUES (0, "testUser", "testUser", "testUser@a.com", "testGroup","testCompany");
+-- VALUES (0, 'testUser', 'aaa', 'a@b.com', 'testGroup','testCompany');
+
+INSERT INTO CustomerOrder
+VALUES (0, 'aaa', 'a', 'a', 'asdas12', 1.23, 'valami', 'DNS');
+INSERT INTO CustomerOrder
+VALUES (1, 'aaa', 'a', 'a', 'asdas12', 1.23, 'valami', 'DNS');
+INSERT INTO CustomerOrder
+VALUES (2, 'aaa', 'a', 'a', 'asdas12', 1.23, 'valami', 'DNS');
 INSERT INTO LaborUser(id, name, email, password)
 VALUES (0, 'dante', 'test@test.com', 'dante')

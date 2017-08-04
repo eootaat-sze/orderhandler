@@ -7,6 +7,7 @@ import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.LaborUser;
 import com.szbk.Model.Entity.User;
 import com.szbk.View.customer.CustomerUI;
+import com.szbk.View.laborUser.LaborUserUI;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.EmailValidator;
@@ -19,10 +20,6 @@ import com.vaadin.shared.Position;
 import com.vaadin.spring.VaadinNavigatorConfiguration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-
-/**
- * Created by dante on 2017.04.04..
- */
 
 public class LoginWindow extends Window implements View {
     CustomerController customerController;
@@ -92,7 +89,8 @@ public class LoginWindow extends Window implements View {
                     VaadinSession.getCurrent().setAttribute("laborUserName", lb.getName());
                     VaadinSession.getCurrent().setAttribute("email", lb.getEmail());
                     VaadinSession.getCurrent().setAttribute("id", lb.getId());
-                    System.out.println("It's workign");
+                    getUI().setContent(new LaborUserUI(orderController, customerController, laborUserController));
+                    getUI().removeWindow(this);
                 } else {
                     c = customerController.login(user);
                 }

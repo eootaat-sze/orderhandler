@@ -9,10 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-/**
- * Created by dante on 2017.07.31..
- */
-
 @UIScope
 @SpringComponent
 public class LaborUserController {
@@ -21,14 +17,14 @@ public class LaborUserController {
 
     public LaborUser login(User u) {
         List<LaborUser> laborUsers = repo.findAll();
-        System.out.println("controller::login " + u);
-        System.out.println("laborUsers: " + laborUsers);
+//        System.out.println("controller::login " + u);
+//        System.out.println("laborUsers: " + laborUsers);
         for (LaborUser lb : laborUsers) {
-            System.out.println("lb.email: " + lb.getEmail());
-            System.out.println("lb.password: " + lb.getPassword());
+//            System.out.println("lb.email: " + lb.getEmail());
+//            System.out.println("lb.password: " + lb.getPassword());
             if (lb.getEmail().equals(u.getEmail())) {
                 if (lb.getPassword().equals(u.getPassword())) {
-                    System.out.println("lb: " + lb);
+//                    System.out.println("lb: " + lb);
                     return lb;
                 }
             }

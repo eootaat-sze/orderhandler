@@ -16,8 +16,11 @@ public class OrderController {
 
     //Returns all the orders from the database.
     public List<CustomerOrder> getAllOrdersByCustomer(String customerName, String groupName, String companyName) {
-//        return repo.findAllById(id);
         return repo.findCustomerOrdersByCustomerNameAndGroupNameAndCompanyName(customerName, groupName, companyName);
+    }
+
+    public List<CustomerOrder> getAllOrders() {
+        return repo.findAll();
     }
 
     public boolean saveOrder(CustomerOrder order) {
