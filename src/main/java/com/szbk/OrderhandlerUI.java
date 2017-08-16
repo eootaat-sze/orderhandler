@@ -41,9 +41,28 @@ public class OrderhandlerUI extends UI {
         addWindow(loginWindow);
 
         laborUserController.registration(new LaborUser("test", "test@test.com", "test"));
-        orderController.saveOrder(new CustomerOrder("aaa", "aaa", "aaa", "asd123", 1.23, "alapos", "DNS", LocalDate.now()));
-        orderController.saveOrder(new CustomerOrder("aaa", "aaa", "aaa", "asd123", 1.23, "alapos", "DNS", LocalDate.now()));
-        orderController.saveOrder(new CustomerOrder("aaa", "aaa", "aaa", "asd123", 1.23, "alapos", "DNS", LocalDate.now()));
+        orderController.saveManyOrder(
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now())
+        );
 
         //navigator = new Navigator(this, this);
         //showLoginWindow();

@@ -1,0 +1,1 @@
+$wnd.AppWidgetset.runAsyncCallback2('tTb(1705,1,{204:1,1:1});_.edb=function NQd(){this.fdb(this.b)};_.fdb=function OQd(a){this.gdb(a)};_.gdb=function PQd(a){};_.jf=function RQd(){this.edb();Whd().b3(this.a.nc())};smg(op)(2);\n//# sourceURL=AppWidgetset-2.js\n')

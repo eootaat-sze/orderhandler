@@ -3,6 +3,8 @@ package com.szbk.View.laborUser;
 import com.szbk.Controller.CustomerController;
 import com.szbk.Controller.LaborUserController;
 import com.szbk.Controller.OrderController;
+import com.szbk.OrderhandlerUI;
+import com.szbk.View.LoginWindow;
 import com.szbk.View.SideBarMenu;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -111,7 +113,9 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         logoutButton.addStyleName(ValoTheme.MENU_ITEM);
         logoutButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         logoutButton.addClickListener(e -> {
-            Notification.show("Itt majd ki tudsz lépni, keep calm.");
+//            Notification.show("Itt majd ki tudsz lépni, keep calm.");
+            getUI().addWindow(new LoginWindow(customerController, orderController, laborUserController));
+            ((OrderhandlerUI) getUI()).setupWelcomeScreen();
         });
 
         sidebar.addComponents(ordersButton, reportButton, whateverButton, listOfEverythingButton, logoutButton);

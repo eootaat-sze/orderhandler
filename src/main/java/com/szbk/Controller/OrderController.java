@@ -36,4 +36,20 @@ public class OrderController {
 
         return false;
     }
+
+    public boolean saveManyOrder(CustomerOrder... orders) {
+        long count = repo.count();
+        boolean success = false;
+
+        for (CustomerOrder order : orders) {
+            success = saveOrder(order);
+
+            if (!success) {
+                System.out.println("Problem with the order: " + order);
+                break;
+            }
+        }
+
+        return success;
+    }
 }
