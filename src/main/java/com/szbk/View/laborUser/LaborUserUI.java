@@ -23,13 +23,15 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
     private LaborUserController laborUserController;
 
     private AllCustomerOrders allOrders;
+    private ReportPage reportPage;
 
     public LaborUserUI(OrderController orderController, CustomerController customerController, LaborUserController laborUserController) {
         this.orderController = orderController;
         this.customerController = customerController;
         this.laborUserController = laborUserController;
 
-        this.allOrders = new AllCustomerOrders(orderController);
+        this.allOrders = new AllCustomerOrders(this);
+        this.reportPage = new ReportPage(customerController, orderController);
 
         setSplitPosition(18f, Unit.PERCENTAGE);
         setLocked(true);
@@ -85,6 +87,7 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         ordersButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         ordersButton.addClickListener(e -> {
 //            Notification.show("Még idő, de majd láthatod, mit rendeltek");
+            allOrders.refreshOrders();
             setSecondComponent(allOrders);
         });
 
@@ -92,7 +95,8 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         reportButton.addStyleName(ValoTheme.MENU_ITEM);
         reportButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         reportButton.addClickListener(e -> {
-            Notification.show("Report? Miért, feedel?");
+//            Notification.show("Report? Miért, feedel?");
+            setSecondComponent(reportPage);
         });
 
         whateverButton.setIcon(VaadinIcons.CREDIT_CARD);
@@ -122,6 +126,19 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
 //        sideBarMenu.addComponent(menuLayout);
         return sidebar;
     }
+
+    public OrderController getOrderController() {
+        return orderController;
+    }
+
+    public CustomerController getCustomerController() {
+        return customerController;
+    }
+
+    public LaborUserController getLaborUserController() {
+        return laborUserController;
+    }
+
 
 
     @Override

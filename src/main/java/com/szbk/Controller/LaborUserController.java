@@ -1,7 +1,7 @@
 package com.szbk.Controller;
 
 import com.szbk.Model.Entity.LaborUser;
-import com.szbk.Model.Entity.LaborUserRepository;
+import com.szbk.Model.LaborUserRepository;
 import com.szbk.Model.Entity.User;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;

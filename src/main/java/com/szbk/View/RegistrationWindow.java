@@ -10,6 +10,8 @@ import com.vaadin.shared.Position;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.StringTokenizer;
+
 /**
  * Created by dante on 2017.04.09..
  */
@@ -93,6 +95,8 @@ public class RegistrationWindow extends Window {
         //TODO If the registration is successfull, and email should be sended for the registrated email address.
             Customer customer = new Customer();
             if (validateCustomer(customer)) {
+                customer.setInnerName(createInnerNameForCustomer(customer));
+
                 if (controller.registration(customer)) {
                     clearFields();
                     notification.show(getUI().getPage());
@@ -113,7 +117,18 @@ public class RegistrationWindow extends Window {
         setContent(mainLayout);
     }
 
+    private String createInnerNameForCustomer(Customer customer) {
+        StringTokenizer st = new StringTokenizer(customer.getCustomerName(), " ");
+        StringBuilder innerName = new StringBuilder();
 
+        while (st.hasMoreElements()) {
+            innerName.append(st.nextToken().charAt(0));
+        }
+
+        innerName.append(customer.getId());
+
+        return innerName.toString();
+    }
 
     private boolean validateCustomer(Customer customer) {
         try {

@@ -1,13 +1,14 @@
 package com.szbk.View.laborUser;
 
-import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.CustomerOrder;
+import com.szbk.Model.Entity.LaborUser;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.simplefiledownloader.SimpleFileDownloader;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class JobWindow extends Window {
@@ -17,12 +18,16 @@ public class JobWindow extends Window {
     private Grid jobGrid;
     private Button synFileGenerationButton;
 
-    private Set ordersForJob;
+    private Set<CustomerOrder> ordersForJob;
 
     private SimpleFileDownloader fileDownloader;
 
-    public JobWindow(Set<CustomerOrder> orders) {
+    private LaborUserUI ui;
+
+    public JobWindow(LaborUserUI ui, Set<CustomerOrder> orders) {
+        this.ui = ui;
         this.ordersForJob = orders;
+
         this.layout = new VerticalLayout();
         this.siteTitle = new Label();
         this.jobGrid = new Grid<>(CustomerOrder.class);
@@ -48,12 +53,14 @@ public class JobWindow extends Window {
         synFileGenerationButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         synFileGenerationButton.addClickListener(e -> {
             synFileBuildAndDownload();
+            ui.getOrderController().saveManyOrder(changeOrderStatus());
+            getUI().removeWindow(this);
         });
 
         //setup the grid
         jobGrid.setItems(ordersForJob);
         jobGrid.setSizeFull();
-        jobGrid.setColumns("sequence", "scale", "purification", "type");
+        jobGrid.setColumns("customerInnerName", "sequence", "scale", "purification", "type");
 
         //TODO It is possible to add editor component to an existing column. An example is in the Sampler.
 
@@ -77,13 +84,51 @@ public class JobWindow extends Window {
             builder.append("\n");
         }
 
-        System.out.println(builder.toString());
-
-        final StreamResource resource = new StreamResource(() -> {
-            return new ByteArrayInputStream(builder.toString().getBytes());
-        }, "testFile.syn");
+        final StreamResource resource = new StreamResource(
+            () -> new ByteArrayInputStream(builder.toString().getBytes()),
+            createFileName()
+        );
 
         fileDownloader.setFileDownloadResource(resource);
         fileDownloader.download();
+    }
+
+    private String createFileName() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.valueOf(dateTime.getYear()));
+
+        if (dateTime.getMonthValue() < 10) {
+            sb.append("0");
+        }
+
+        sb.append(String.valueOf(dateTime.getMonthValue()));
+        sb.append(String.valueOf(dateTime.getDayOfMonth()));
+        sb.append("-");
+        sb.append(String.valueOf(dateTime.getHour()));
+
+        //For whatever reason it is a dash (-) in the filename.
+        sb.append(":");
+
+        if (dateTime.getMinute() < 10) {
+            sb.append("0");
+        }
+
+        sb.append(String.valueOf(dateTime.getMinute()));
+        sb.append(".syn");
+
+        return sb.toString();
+    }
+
+    private Set<CustomerOrder> changeOrderStatus() {
+        for (CustomerOrder order : this.ordersForJob) {
+            order.setStatus("Folyamatban");
+        }
+
+        return ordersForJob;
+    }
+
+    public void setOrdersForJob(Set<CustomerOrder> orders) {
+        this.ordersForJob = orders;
     }
 }

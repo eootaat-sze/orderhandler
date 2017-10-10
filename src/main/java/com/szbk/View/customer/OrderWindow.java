@@ -2,8 +2,7 @@ package com.szbk.View.customer;
 
 import com.szbk.Controller.OrderController;
 import com.szbk.Model.Entity.CustomerOrder;
-import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationException;
+import com.vaadin.data.*;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinSession;
@@ -120,7 +119,13 @@ public class OrderWindow extends VerticalLayout {
         sequence.focus();
 //        dataBinder.bind(sequence, CustomerOrder::getSequence, CustomerOrder::setSequence);
         dataBinder.forField(sequence).asRequired(REQUIRED)
-                .bind(CustomerOrder::getSequence, CustomerOrder::setSequence);
+                .withValidator((Validator<String>) (value, context) -> {
+                    if (sequence.getValue().contains(" ")) {
+                        return ValidationResult.error("A szekvencia nem tartalmazhat szóközt!");
+                    } else {
+                        return ValidationResult.ok();
+                    }
+                }).bind(CustomerOrder::getSequence, CustomerOrder::setSequence);
 
         ComboBox<String> purification = new ComboBox<>();
         purification.setItems("Egyszerű tisztítás - 1000 Ft", "Alapos tisztítás - 5000 Ft");
@@ -158,6 +163,8 @@ public class OrderWindow extends VerticalLayout {
 
         Button sendOrderBtn = new Button("Rendelés leadása", e -> {
             order.setOrderDate(orderDate.getValue());
+            order.setCustomerInnerName(String.valueOf(VaadinSession.getCurrent().getAttribute("innerName")));
+            order.setStatus("Elkészült");
 
             Notification notification = new Notification("Sikeres rendelés!");
             notification.setStyleName(ValoTheme.NOTIFICATION_SUCCESS);

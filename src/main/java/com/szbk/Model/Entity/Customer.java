@@ -18,6 +18,7 @@ public class Customer {
     private String email;
     private String groupName;
     private String companyName;
+    private String innerName;
 
     public Customer() {}
 
@@ -72,6 +73,14 @@ public class Customer {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getInnerName() {
+        return this.innerName;
+    }
+
+    public void setInnerName(String innerName) {
+        this.innerName = innerName;
     }
 
     public long getId() {

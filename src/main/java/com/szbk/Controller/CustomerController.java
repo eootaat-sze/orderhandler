@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //The controller, which does the customer things, like login and registration.
@@ -44,5 +45,26 @@ public class CustomerController {
         }
 
         return null;
+    }
+
+    public List<String> getAllCustomersNameAndEmail() {
+        List<String> customerNameAndEmail = new ArrayList<>();
+        List<Customer> customers = repo.findAll();
+        String value;
+
+        System.out.println("controller: " + customers);
+        for (Customer c : customers) {
+            value = c.getEmail() + " - " + c.getCustomerName();
+            System.out.println("value: " + value);
+            customerNameAndEmail.add(value);
+        }
+
+        System.out.println("controller: " + customers);
+
+        return customerNameAndEmail;
+    }
+
+    public Customer findCustomerByEmail(String email) {
+        return repo.findCustomerByEmail(email);
     }
 }

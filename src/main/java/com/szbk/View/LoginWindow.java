@@ -97,15 +97,11 @@ public class LoginWindow extends Window implements View {
 
                 if (c != null) {
                     clearFields();
-//                    getSession().setAttribute("customerName", c.getCustomerName());
-//                    getSession().setAttribute("groupName", c.getGroupName());
-//                    getSession().setAttribute("companyName", c.getCompanyName());
-//                    getSession().setAttribute("id", c.getId());
                     VaadinSession.getCurrent().setAttribute("customerName", c.getCustomerName());
                     VaadinSession.getCurrent().setAttribute("groupName", c.getGroupName());
                     VaadinSession.getCurrent().setAttribute("companyName", c.getCompanyName());
                     VaadinSession.getCurrent().setAttribute("id", c.getId());
-                    //TODO Do something with it! It is not okay to pass the laborUserController to the customerUI. I don't need that there.
+                    VaadinSession.getCurrent().setAttribute("innerName", c.getInnerName());
                     getUI().setContent(new CustomerUI(customerController, orderController, laborUserController));
                     getUI().removeWindow(this);
                 //Some action, like the validateCustomer method, to validate a non-customer user (so a laborUser)
@@ -147,10 +143,6 @@ public class LoginWindow extends Window implements View {
         }
 
         return false;
-    }
-
-    private boolean validateLaborUser(LaborUser user) {
-        return true;
     }
 
     private void clearFields() {

@@ -3,9 +3,11 @@ package com.szbk;
 import com.szbk.Controller.CustomerController;
 import com.szbk.Controller.LaborUserController;
 import com.szbk.Controller.OrderController;
+import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.CustomerOrder;
 import com.szbk.Model.Entity.LaborUser;
 import com.szbk.View.LoginWindow;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -41,27 +43,33 @@ public class OrderhandlerUI extends UI {
         addWindow(loginWindow);
 
         laborUserController.registration(new LaborUser("test", "test@test.com", "test"));
+        customerController.registration(new Customer("aaa", "aaa", "teszt.aaa@b.com", "aaa", "aaa"));
+        CustomerOrder a = new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now());
+        CustomerOrder b = new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now());
+        CustomerOrder c = new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now());
+
+        a.setStatus("Elkészült");
+        b.setStatus("Elkészült");
+        c.setStatus("Elkészült");
         orderController.saveManyOrder(
+                a, b, c,
                 new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
                 new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
-                new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now())
+                new CustomerOrder("bbb", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("bbb", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("bbb", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("bbb", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("bbb", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ccc", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ccc", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ccc", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ccc", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ccc", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now()),
+                new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now())
         );
 
         //navigator = new Navigator(this, this);
@@ -75,6 +83,7 @@ public class OrderhandlerUI extends UI {
         welcomeText.setStyleName(ValoTheme.LABEL_H1);
         welcomeScreen.addComponent(welcomeText);
         welcomeScreen.setComponentAlignment(welcomeText, Alignment.TOP_CENTER);
+
         setContent(welcomeScreen);
     }
 

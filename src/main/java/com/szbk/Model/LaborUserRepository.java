@@ -1,5 +1,6 @@
-package com.szbk.Model.Entity;
+package com.szbk.Model;
 
+import com.szbk.Model.Entity.LaborUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
