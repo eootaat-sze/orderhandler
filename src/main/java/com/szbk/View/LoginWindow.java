@@ -1,10 +1,9 @@
 package com.szbk.View;
 
-import com.szbk.Controller.CustomerController;
-import com.szbk.Controller.LaborUserController;
-import com.szbk.Controller.OrderController;
+import com.szbk.Controller.*;
 import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.LaborUser;
+import com.szbk.Model.Entity.Purification;
 import com.szbk.Model.Entity.User;
 import com.szbk.View.customer.CustomerUI;
 import com.szbk.View.laborUser.LaborUserUI;
@@ -22,9 +21,12 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class LoginWindow extends Window implements View {
-    CustomerController customerController;
-    OrderController orderController;
-    LaborUserController laborUserController;
+    private CustomerController customerController;
+    private OrderController orderController;
+    private LaborUserController laborUserController;
+    private PurificationController purificationController;
+    private TypeController typeController;
+
     private Binder<User> dataBinder;
 
     private HorizontalLayout layout;
@@ -32,10 +34,13 @@ public class LoginWindow extends Window implements View {
     private TextField email;
     private PasswordField password;
 
-    public LoginWindow(CustomerController controller, OrderController orderController, LaborUserController laborUserController) {
-        this.customerController = controller;
-        this.orderController = orderController;
-        this.laborUserController = laborUserController;
+    public LoginWindow(CustomerController cc, OrderController oc, LaborUserController lc, PurificationController pc, TypeController tc) {
+        this.customerController = cc;
+        this.orderController = oc;
+        this.laborUserController = lc;
+        this.purificationController = pc;
+        this.typeController = tc;
+
         dataBinder = new Binder<>(User.class);
 
         //It contains the two textfields and the login button.
@@ -65,6 +70,7 @@ public class LoginWindow extends Window implements View {
         Button loginButton = new Button("Belépés");
         Button registrationButton = new Button("Regisztráció");
         email = new TextField();
+        email.focus();
         dataBinder.forField(email).withValidator(new EmailValidator("Ez nem valid email cím!"))
                 .bind(User::getEmail, User::setEmail);
 
@@ -89,7 +95,7 @@ public class LoginWindow extends Window implements View {
                     VaadinSession.getCurrent().setAttribute("laborUserName", lb.getName());
                     VaadinSession.getCurrent().setAttribute("email", lb.getEmail());
                     VaadinSession.getCurrent().setAttribute("id", lb.getId());
-                    getUI().setContent(new LaborUserUI(orderController, customerController, laborUserController));
+                    getUI().setContent(new LaborUserUI(orderController, customerController, laborUserController, purificationController, typeController));
                     getUI().removeWindow(this);
                 } else {
                     c = customerController.login(user);
@@ -102,7 +108,7 @@ public class LoginWindow extends Window implements View {
                     VaadinSession.getCurrent().setAttribute("companyName", c.getCompanyName());
                     VaadinSession.getCurrent().setAttribute("id", c.getId());
                     VaadinSession.getCurrent().setAttribute("innerName", c.getInnerName());
-                    getUI().setContent(new CustomerUI(customerController, orderController, laborUserController));
+                    getUI().setContent(new CustomerUI(customerController, orderController, laborUserController, purificationController, typeController));
                     getUI().removeWindow(this);
                 //Some action, like the validateCustomer method, to validate a non-customer user (so a laborUser)
                 } else if (lb == null) {

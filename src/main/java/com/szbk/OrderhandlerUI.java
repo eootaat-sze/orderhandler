@@ -1,12 +1,9 @@
 package com.szbk;
 
-import com.szbk.Controller.CustomerController;
-import com.szbk.Controller.LaborUserController;
-import com.szbk.Controller.OrderController;
-import com.szbk.Model.Entity.Customer;
-import com.szbk.Model.Entity.CustomerOrder;
-import com.szbk.Model.Entity.LaborUser;
+import com.szbk.Controller.*;
+import com.szbk.Model.Entity.*;
 import com.szbk.View.LoginWindow;
+import com.vaadin.annotations.Title;
 import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -20,29 +17,55 @@ import java.time.LocalDate;
  * Created by dante on 2017.04.04..
  */
 
+@Title("Orderhandler")
 @SpringUI
 public class OrderhandlerUI extends UI {
-    LoginWindow loginWindow;
-    VerticalLayout welcomeScreen;
+    private LoginWindow loginWindow;
+    private VerticalLayout welcomeScreen;
 
     @Autowired
-    CustomerController customerController;
+    private CustomerController customerController;
 
     @Autowired
-    OrderController orderController;
+    private OrderController orderController;
 
     @Autowired
-    LaborUserController laborUserController;
+    private LaborUserController laborUserController;
+
+    @Autowired
+    private PurificationController purificationController;
+
+    @Autowired
+    private TypeController typeController;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         //Navigator navigator = new Navigator(this, this);
         //navigator.addView("customerUI", CustomerUI.class);
-        loginWindow = new LoginWindow(customerController, orderController, laborUserController);
+        loginWindow = new LoginWindow(customerController, orderController, laborUserController, purificationController, typeController);
         setupWelcomeScreen();
         addWindow(loginWindow);
 
-        laborUserController.registration(new LaborUser("test", "test@test.com", "test"));
+        //Puts some demo data to the database.
+        demoData();
+
+        //navigator = new Navigator(this, this);
+        //showLoginWindow();
+//        getNavigator().navigateTo("loginUI");
+    }
+
+    public void setupWelcomeScreen() {
+        welcomeScreen = new VerticalLayout();
+        Label welcomeText = new Label("Üdv az oldalon!");
+        welcomeText.setStyleName(ValoTheme.LABEL_H1);
+        welcomeScreen.addComponent(welcomeText);
+        welcomeScreen.setComponentAlignment(welcomeText, Alignment.TOP_CENTER);
+
+        setContent(welcomeScreen);
+    }
+
+    private void demoData() {
+        laborUserController.registration(new LaborUser("admin", "admin@vaadin.com", "admin"));
         customerController.registration(new Customer("aaa", "aaa", "teszt.aaa@b.com", "aaa", "aaa"));
         CustomerOrder a = new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now());
         CustomerOrder b = new CustomerOrder("aaa", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now());
@@ -72,19 +95,11 @@ public class OrderhandlerUI extends UI {
                 new CustomerOrder("ddd", "aaa", "aaa", "asdasa12312", 1.23, "alapos", "DNS", LocalDate.now())
         );
 
-        //navigator = new Navigator(this, this);
-        //showLoginWindow();
-//        getNavigator().navigateTo("loginUI");
-    }
-
-    public void setupWelcomeScreen() {
-        welcomeScreen = new VerticalLayout();
-        Label welcomeText = new Label("Üdv az oldalon!");
-        welcomeText.setStyleName(ValoTheme.LABEL_H1);
-        welcomeScreen.addComponent(welcomeText);
-        welcomeScreen.setComponentAlignment(welcomeText, Alignment.TOP_CENTER);
-
-        setContent(welcomeScreen);
+        purificationController.savePurification(new Purification("Egyszerű", 2000));
+        purificationController.savePurification(new Purification("Összetett", 3000));
+        typeController.saveType(new Type("RNS", 2000));
+        typeController.saveType(new Type("DNS", 3000));
+        typeController.saveType(new Type("Módosított", 5000));
     }
 
     /*private void showLoginWindow() {

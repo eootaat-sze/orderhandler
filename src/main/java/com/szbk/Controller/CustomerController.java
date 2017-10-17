@@ -24,11 +24,7 @@ public class CustomerController {
         repo.save(c);
 
         //If we have more items in the repository after the save, than we had before, then the customer was saved (practically).
-        if (count < repo.count()) {
-            return true;
-        } else {
-            return false;
-        }
+        return count < repo.count();
     }
 
     public Customer login(User u) {
@@ -55,11 +51,11 @@ public class CustomerController {
         System.out.println("controller: " + customers);
         for (Customer c : customers) {
             value = c.getEmail() + " - " + c.getCustomerName();
-            System.out.println("value: " + value);
+//            System.out.println("value: " + value);
             customerNameAndEmail.add(value);
         }
 
-        System.out.println("controller: " + customers);
+//        System.out.println("controller: " + customers);
 
         return customerNameAndEmail;
     }

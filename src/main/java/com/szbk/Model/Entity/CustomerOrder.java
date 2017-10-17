@@ -24,6 +24,7 @@ public class CustomerOrder {
     private String type;
     private LocalDate orderDate;
     private String status;
+    private int price;
 
     public CustomerOrder() {
         this.status = "Megrendelt";
@@ -133,6 +134,16 @@ public class CustomerOrder {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(int price) {
+        if (price >= 0) {
+            this.price = price;
+        }
     }
 
     public long getId() {

@@ -1,8 +1,7 @@
 package com.szbk.View.laborUser;
 
-import com.szbk.Controller.CustomerController;
-import com.szbk.Controller.LaborUserController;
-import com.szbk.Controller.OrderController;
+import com.szbk.Controller.*;
+import com.szbk.Model.Entity.Purification;
 import com.szbk.OrderhandlerUI;
 import com.szbk.View.LoginWindow;
 import com.szbk.View.SideBarMenu;
@@ -21,17 +20,21 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
     private OrderController orderController;
     private CustomerController customerController;
     private LaborUserController laborUserController;
+    private PurificationController purificationController;
+    private TypeController typeController;
 
     private AllCustomerOrders allOrders;
     private ReportPage reportPage;
 
-    public LaborUserUI(OrderController orderController, CustomerController customerController, LaborUserController laborUserController) {
-        this.orderController = orderController;
-        this.customerController = customerController;
-        this.laborUserController = laborUserController;
+    public LaborUserUI(OrderController oc, CustomerController cc, LaborUserController lc, PurificationController pc, TypeController tc) {
+        this.orderController = oc;
+        this.customerController = cc;
+        this.laborUserController = lc;
+        this.purificationController = pc;
+        this.typeController = tc;
 
         this.allOrders = new AllCustomerOrders(this);
-        this.reportPage = new ReportPage(customerController, orderController);
+        this.reportPage = new ReportPage(cc, oc);
 
         setSplitPosition(18f, Unit.PERCENTAGE);
         setLocked(true);
@@ -118,7 +121,7 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         logoutButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         logoutButton.addClickListener(e -> {
 //            Notification.show("Itt majd ki tudsz lépni, keep calm.");
-            getUI().addWindow(new LoginWindow(customerController, orderController, laborUserController));
+            getUI().addWindow(new LoginWindow(customerController, orderController, laborUserController, purificationController, typeController));
             ((OrderhandlerUI) getUI()).setupWelcomeScreen();
         });
 
@@ -139,7 +142,13 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         return laborUserController;
     }
 
+    public PurificationController getPurificationController() {
+        return this.purificationController;
+    }
 
+    public TypeController getTypeController() {
+        return this.typeController;
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

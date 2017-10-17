@@ -13,23 +13,26 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.StringTokenizer;
 
 public class OrderWindow extends VerticalLayout {
     public static final String REQUIRED = "A mező kitöltése kötelező";
-    Button simpleOrder;
-    Button multiplyOrder;
-    Label simpleOrderDescription;
-    Label multiplyOrderDescription;
-    VerticalLayout descriptions;
-    HorizontalLayout buttons;
+    private Button simpleOrder;
+    private Button multiplyOrder;
+    private Label simpleOrderDescription;
+    private Label multiplyOrderDescription;
+    private VerticalLayout descriptions;
+    private HorizontalLayout buttons;
 
-    Binder<CustomerOrder> dataBinder;
-    CustomerOrder order;
-    OrderController controller;
+    private Binder<CustomerOrder> dataBinder;
+    private CustomerOrder order;
 
-    public OrderWindow(OrderController controller) {
+    private CustomerUI ui;
+
+    public OrderWindow(CustomerUI ui) {
+        this.ui = ui;
         dataBinder = new Binder<>(CustomerOrder.class);
-        this.controller = controller;
 
         simpleOrderDescription = new Label("<b>Egy rendelés</b> esetén minden információt kézzel adhatsz meg," +
                 "mert (feltételezem) egyetlen rendelést szeretnél leadni.</br> Ezen opció kiválasztásakor nincs lehetőség" +
@@ -65,6 +68,7 @@ public class OrderWindow extends VerticalLayout {
         setSizeFull();
     }
 
+    //These three textfields are the same in both of the order styles, so I make it before everything.
     private VerticalLayout addControlls() {
         order = new CustomerOrder();
 
@@ -128,14 +132,15 @@ public class OrderWindow extends VerticalLayout {
                 }).bind(CustomerOrder::getSequence, CustomerOrder::setSequence);
 
         ComboBox<String> purification = new ComboBox<>();
-        purification.setItems("Egyszerű tisztítás - 1000 Ft", "Alapos tisztítás - 5000 Ft");
+        purification.setItems(ui.getPurificationController().getPurificationNamesAndPricesAsStrings());
         purification.setEmptySelectionAllowed(false);
         purification.setPlaceholder("Tisztítás típusa");
         purification.setDescription("Purification megadása");
         purification.setWidth(100, Unit.PERCENTAGE);
 //        dataBinder.bind(purification, CustomerOrder::getPurification, CustomerOrder::setPurification);
-        dataBinder.forField(purification).asRequired(REQUIRED)
-                .bind(CustomerOrder::getPurification, CustomerOrder::setPurification);
+//        dataBinder.forField(purification).asRequired(REQUIRED)
+//                .bind(CustomerOrder::getPurification, CustomerOrder::setPurification);
+        dataBinder.forField(purification).asRequired(REQUIRED);
 
         TextField scale = new TextField();
         scale.setPlaceholder("Scale");
@@ -146,13 +151,14 @@ public class OrderWindow extends VerticalLayout {
                 .bind(CustomerOrder::getScale, CustomerOrder::setScale);
 
         ComboBox<String> type = new ComboBox<>();
-        type.setItems("DNS", "RNS", "módosított");
+        type.setItems(ui.getTypeController().getTypeNamesAndPricesAsStrings());
         type.setEmptySelectionAllowed(false);
         type.setPlaceholder("Típus");
         type.setDescription("Típus megadása");
         type.setWidth(100, Unit.PERCENTAGE);
 //        dataBinder.bind(type, CustomerOrder::getType, CustomerOrder::setType);
-        dataBinder.forField(type).asRequired(REQUIRED).bind(CustomerOrder::getType, CustomerOrder::setType);
+//        dataBinder.forField(type).asRequired(REQUIRED).bind(CustomerOrder::getType, CustomerOrder::setType);
+        dataBinder.forField(type).asRequired(REQUIRED);
 
         //The date of the order won't be binded, because it is not possible (binder works only with strings), so I add
         //it to the order object manually, later.
@@ -162,8 +168,13 @@ public class OrderWindow extends VerticalLayout {
         orderDate.setEnabled(false);
 
         Button sendOrderBtn = new Button("Rendelés leadása", e -> {
+            String[] names = getTheNames(String.valueOf(purification.getSelectedItem().get()), String.valueOf(type.getSelectedItem().get()));
+
             order.setOrderDate(orderDate.getValue());
             order.setCustomerInnerName(String.valueOf(VaadinSession.getCurrent().getAttribute("innerName")));
+            order.setPrice(getThePrice(String.valueOf(purification.getSelectedItem()), String.valueOf(type.getSelectedItem())));
+            order.setPurification(names[0]);
+            order.setType(names[1]);
             order.setStatus("Elkészült");
 
             Notification notification = new Notification("Sikeres rendelés!");
@@ -172,7 +183,8 @@ public class OrderWindow extends VerticalLayout {
 
 
             if (validateOrder()) {
-                if (controller.saveOrder(order)) {
+                System.out.println("p: " + order.getPurification() + ", t: " + order.getType());
+                if (ui.getOrderController().saveOrder(order)) {
                     notification.show(getUI().getPage());
                     getUI().removeWindow(orderWindow);
                     System.out.println("order: " + order);
@@ -270,6 +282,22 @@ public class OrderWindow extends VerticalLayout {
             failOrderNotification.show(getUI().getPage());
             return false;
         }
+    }
+
+    //A method, which splits the given strings and returns the price of the order.
+    private int getThePrice(String purificationString, String typeString) {
+        int price = Integer.parseInt(purificationString.split(" ")[2].trim());
+        price += Integer.parseInt(typeString.split(" ")[2].trim());
+
+        return price;
+    }
+
+    private String[] getTheNames(String purificationString, String typeString) {
+        String[] values = new String[2];
+        values[0] = purificationString.split(" ")[0].trim().toLowerCase();
+        values[1] = typeString.split(" ")[0].trim();
+
+        return values;
     }
 
     private class FileReceiver implements Upload.Receiver {

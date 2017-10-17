@@ -145,7 +145,7 @@ public class RegistrationWindow extends Window {
         return false;
     }
 
-    private void clearFields() {
+    public void clearFields() {
         this.customerName.clear();
         this.password.clear();
         this.password2.clear();

@@ -1,8 +1,7 @@
 package com.szbk.View.customer;
 
-import com.szbk.Controller.CustomerController;
-import com.szbk.Controller.LaborUserController;
-import com.szbk.Controller.OrderController;
+import com.szbk.Controller.*;
+import com.szbk.Model.Entity.Purification;
 import com.szbk.OrderhandlerUI;
 import com.szbk.View.LoginWindow;
 import com.szbk.View.SideBarMenu;
@@ -18,16 +17,21 @@ import com.vaadin.ui.themes.ValoTheme;
  * Created by dante on 2017.04.11..
  */
 public class CustomerUI extends HorizontalSplitPanel implements View {
-    Label descriptionText;
-    VerticalLayout descriptionTextLayout;
-    CustomerController customerController;
-    OrderController orderController;
-    LaborUserController laborUserController;
+    private Label descriptionText;
+    private VerticalLayout descriptionTextLayout;
 
-    public CustomerUI(CustomerController customerController, OrderController orderController, LaborUserController laborUserController) {
-        this.customerController = customerController;
-        this.orderController = orderController;
-        this.laborUserController = laborUserController;
+    private CustomerController customerController;
+    private OrderController orderController;
+    private LaborUserController laborUserController;
+    private PurificationController purificationController;
+    private TypeController typeController;
+
+    public CustomerUI(CustomerController cc, OrderController oc, LaborUserController lc, PurificationController pc, TypeController tc) {
+        this.customerController = cc;
+        this.orderController = oc;
+        this.laborUserController = lc;
+        this.purificationController = pc;
+        this.typeController = tc;
 
         setSplitPosition(18f, Unit.PERCENTAGE);
         setLocked(true);
@@ -56,7 +60,7 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
         orderButton.addStyleName(ValoTheme.MENU_ITEM);
         orderButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         orderButton.addClickListener(e -> {
-            setSecondComponent(new OrderWindow(getOrderController()));
+            setSecondComponent(new OrderWindow(this));
         });
 
         //Setup the orders button, which will show a list (a table, actually) with the orders of the current user.
@@ -73,7 +77,7 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
         logoutButton.addStyleName(ValoTheme.MENU_ITEM);
         logoutButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         logoutButton.addClickListener(e -> {
-            getUI().addWindow(new LoginWindow(getCustomerController(), getOrderController(), getLaborUserController()));
+            getUI().addWindow(new LoginWindow(customerController, orderController, laborUserController, purificationController, typeController));
             ((OrderhandlerUI) getUI()).setupWelcomeScreen();
         });
 
@@ -92,6 +96,14 @@ public class CustomerUI extends HorizontalSplitPanel implements View {
 
     public LaborUserController getLaborUserController() {
         return this.laborUserController;
+    }
+
+    public PurificationController getPurificationController() {
+        return this.purificationController;
+    }
+
+    public TypeController getTypeController() {
+        return this.typeController;
     }
 
     @Override

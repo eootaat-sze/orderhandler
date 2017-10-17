@@ -37,9 +37,10 @@ public class OrdersList extends VerticalLayout {
                 String.valueOf(VaadinSession.getCurrent().getAttribute("groupName")),
                 String.valueOf(VaadinSession.getCurrent().getAttribute("companyName")));
         ordersGrid.setItems(orders);
-        ordersGrid.setColumns("orderDate", "status", "sequence", "scale", "purification", "type");
+        ordersGrid.setColumns("orderDate", "status", "price", "sequence", "scale", "purification", "type");
         ordersGrid.getColumn("orderDate").setCaption("Megrendelés dátuma");
         ordersGrid.getColumn("status").setCaption("Státusz");
+        ordersGrid.getColumn("price").setCaption("Ár (Forint)");
         ordersGrid.getColumn("sequence").setCaption("Szekvencia");
         ordersGrid.getColumn("purification").setCaption("Tisztítás");
         ordersGrid.getColumn("type").setCaption("Típus");

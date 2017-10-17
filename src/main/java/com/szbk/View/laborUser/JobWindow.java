@@ -52,15 +52,20 @@ public class JobWindow extends Window {
         synFileGenerationButton.setCaption("Syn fájl generálás");
         synFileGenerationButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         synFileGenerationButton.addClickListener(e -> {
-            synFileBuildAndDownload();
-            ui.getOrderController().saveManyOrder(changeOrderStatus());
-            getUI().removeWindow(this);
+            if (synFileBuildAndDownload()) {
+                ui.getOrderController().saveManyOrder(changeOrderStatus());
+//                getUI().removeWindow(this);
+            }
         });
 
         //setup the grid
         jobGrid.setItems(ordersForJob);
         jobGrid.setSizeFull();
         jobGrid.setColumns("customerInnerName", "sequence", "scale", "purification", "type");
+        jobGrid.getColumn("customerInnerName").setCaption("Belső azonosító");
+        jobGrid.getColumn("sequence").setCaption("Szekvencia");
+        jobGrid.getColumn("purification").setCaption("Tisztítás");
+        jobGrid.getColumn("type").setCaption("Típus");
 
         //TODO It is possible to add editor component to an existing column. An example is in the Sampler.
 
@@ -71,7 +76,8 @@ public class JobWindow extends Window {
         setContent(layout);
     }
 
-    private void synFileBuildAndDownload() {
+    private boolean synFileBuildAndDownload() {
+        boolean isTheFileDownloaded = false;
         StringBuilder builder = new StringBuilder();
         builder.append("\"Applied Biosystems Oligonucleotide Synthesizer Software Synthesis File\"\n");
 
@@ -91,6 +97,10 @@ public class JobWindow extends Window {
 
         fileDownloader.setFileDownloadResource(resource);
         fileDownloader.download();
+
+        isTheFileDownloaded = true;
+
+        return isTheFileDownloaded;
     }
 
     private String createFileName() {

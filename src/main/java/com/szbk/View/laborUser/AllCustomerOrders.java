@@ -112,7 +112,7 @@ public class AllCustomerOrders extends VerticalLayout {
             }
             jobWindow.setOrdersForJob(items);
             getUI().addWindow(jobWindow);
-            orders.deselectAll();
+//            orders.deselectAll();
         });
     }
 
