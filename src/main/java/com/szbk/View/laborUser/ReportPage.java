@@ -4,6 +4,7 @@ import com.szbk.Controller.CustomerController;
 import com.szbk.Controller.OrderController;
 import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.CustomerOrder;
+import com.szbk.Model.Entity.LaborUser;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -22,15 +23,13 @@ public class ReportPage extends VerticalLayout {
     private Grid<CustomerOrder> customerOrders;
     private Button createReport;
 
-    private CustomerController customerController;
-    private OrderController orderController;
+    private LaborUserUI ui;
 
     private Set<CustomerOrder> selectedOrders;
     private SimpleFileDownloader fileDownloader;
 
-    public ReportPage(CustomerController customerController, OrderController orderController) {
-        this.customerController = customerController;
-        this.orderController = orderController;
+    public ReportPage(LaborUserUI ui) {
+        this.ui = ui;
 
         this.siteTitle = new Label("Report készítés");
         this.customerCombobox = new ComboBox<>();
@@ -59,7 +58,7 @@ public class ReportPage extends VerticalLayout {
         siteTitle.setStyleName(ValoTheme.LABEL_H2);
 
         customerCombobox.setPlaceholder("Megrendelő kiválasztása");
-        customerCombobox.setItems(customerController.getAllCustomersNameAndEmail());
+        customerCombobox.setItems(ui.getCustomerController().getAllCustomersNameAndEmail());
         customerCombobox.setWidth(100, Unit.PERCENTAGE);
         customerCombobox.setEmptySelectionAllowed(false);
 
@@ -70,13 +69,14 @@ public class ReportPage extends VerticalLayout {
     }
 
     private void setupGrid() {
-        StringTokenizer st = new StringTokenizer(customerCombobox.getSelectedItem().get(), "-");
-        String selectedCustomerEmail = st.nextToken().trim();
-        String selectedCustomerName = st.nextToken().trim();
+//        StringTokenizer st = new StringTokenizer(customerCombobox.getSelectedItem().get(), "-");
+//        String selectedCustomerEmail = st.nextToken().trim();
+//        String selectedCustomerName = st.nextToken().trim();
+        String[] data = customerCombobox.getSelectedItem().get().split("-");
 
-        Customer selectedCustomer = customerController.findCustomerByEmail(selectedCustomerEmail);
+        Customer selectedCustomer = ui.getCustomerController().findCustomerByEmail(data[0].trim());
 
-        customerOrders.setItems(orderController.getAllOrdersByCustomer(selectedCustomer.getCustomerName(), selectedCustomer.getGroupName(), selectedCustomer.getCompanyName(), "Elkészült"));
+        customerOrders.setItems(ui.getOrderController().getAllOrdersByCustomer(selectedCustomer.getCustomerName(), selectedCustomer.getGroupName(), selectedCustomer.getCompanyName(), "Elkészült"));
         customerOrders.setColumns("sequence", "scale", "purification", "type");
         customerOrders.getColumn("sequence").setCaption("Szekvencia");
         customerOrders.getColumn("purification").setCaption("Tisztítás");
@@ -91,7 +91,7 @@ public class ReportPage extends VerticalLayout {
             if (selectedOrders.size() > 0) {
                 createReport.setCaption("Report készítés " + selectedOrders.size() + " elemből");
 
-                String filename = selectedCustomerName.trim().replace(" ", "-").concat("_report");
+                String filename = data[1].trim().replace(" ", "-").concat("_report");
                 setupExportButton(filename);
             } else {
                 createReport.setVisible(false);
@@ -104,6 +104,7 @@ public class ReportPage extends VerticalLayout {
         selectCustomer.setStyleName(ValoTheme.BUTTON_PRIMARY);
         selectCustomer.addClickListener(e -> {
             setupGrid();
+            changeFilterButtonFunction();
         });
 
         createReport.setVisible(false);
@@ -115,7 +116,8 @@ public class ReportPage extends VerticalLayout {
         createReport.setStyleName(ValoTheme.BUTTON_PRIMARY);
         createReport.addClickListener(e -> {
             createAndDownloadFile(filename);
-            orderController.saveManyOrder(changeOrderStatus());
+            ui.getOrderController().saveManyOrder(changeOrderStatus());
+//            clearFields();
         });
     }
 
@@ -148,5 +150,23 @@ public class ReportPage extends VerticalLayout {
         }
 
         return selectedOrders;
+    }
+
+    //TODO It is strange, that the grid become invisible right after the button click. Some better solution?!
+    public void clearFields() {
+        customerCombobox.clear();
+        customerOrders.setVisible(false);
+        createReport.setVisible(false);
+    }
+
+    private void changeFilterButtonFunction() {
+        if (selectCustomer.getCaption().equals("Kiválasztás")) {
+            selectCustomer.setCaption("Új listázás");
+            customerCombobox.setEnabled(false);
+        } else if (selectCustomer.getCaption().equals("Új listázás")) {
+            selectCustomer.setCaption("Kiválasztás");
+            customerCombobox.setEnabled(true);
+            customerOrders.setVisible(false);
+        }
     }
 }

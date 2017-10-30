@@ -74,4 +74,36 @@ public class OrderController {
 
         return success;
     }
+
+    public boolean saveManyOrder(List<CustomerOrder> orders) {
+        long count = repo.count();
+        boolean success = false;
+
+        for (CustomerOrder order: orders) {
+            success = saveOrder(order);
+
+//            if (!success) {
+//                System.out.println("Problem with the order: " + order);
+//                break;
+//            }
+        }
+
+        return success;
+    }
+
+    public List<String> getCompanyNames() {
+        return repo.getAllCompanyNames();
+    }
+
+    public List<String> getGroupNames(String companyName) {
+        return repo.getAllGroupNames(companyName);
+    }
+
+    public List<String> getCustomerNames(String companyName, String groupName) {
+        return repo.getAllCustomerNames(companyName, groupName);
+    }
+
+    public List<CustomerOrder> getOrdersByCompanyGroupAndCustomerName(String companyName, String groupName, String customerName) {
+        return repo.findCustomerOrdersByCompanyNameAndGroupNameAndCustomerName(companyName, groupName, customerName);
+    }
 }

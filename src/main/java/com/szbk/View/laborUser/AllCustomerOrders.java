@@ -1,6 +1,5 @@
 package com.szbk.View.laborUser;
 
-import com.szbk.Model.Entity.Customer;
 import com.szbk.Model.Entity.CustomerOrder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;

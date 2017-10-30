@@ -38,4 +38,8 @@ public class LaborUserController {
 
         return true;
     }
+
+    public List<LaborUser> getAllLaborUsers() {
+        return repo.findAll();
+    }
 }

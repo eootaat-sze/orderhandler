@@ -1,7 +1,6 @@
 package com.szbk.View.laborUser;
 
 import com.szbk.Controller.*;
-import com.szbk.Model.Entity.Purification;
 import com.szbk.OrderhandlerUI;
 import com.szbk.View.LoginWindow;
 import com.szbk.View.SideBarMenu;
@@ -25,6 +24,8 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
 
     private AllCustomerOrders allOrders;
     private ReportPage reportPage;
+    private SettlementPage settlementPage;
+    private ListingPage listingPage;
 
     public LaborUserUI(OrderController oc, CustomerController cc, LaborUserController lc, PurificationController pc, TypeController tc) {
         this.orderController = oc;
@@ -34,7 +35,9 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         this.typeController = tc;
 
         this.allOrders = new AllCustomerOrders(this);
-        this.reportPage = new ReportPage(cc, oc);
+        this.reportPage = new ReportPage(this);
+        this.settlementPage = new SettlementPage(this);
+        this.listingPage = new ListingPage(this);
 
         setSplitPosition(18f, Unit.PERCENTAGE);
         setLocked(true);
@@ -99,6 +102,7 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         reportButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         reportButton.addClickListener(e -> {
 //            Notification.show("Report? Miért, feedel?");
+            reportPage.clearFields();
             setSecondComponent(reportPage);
         });
 
@@ -106,14 +110,17 @@ public class LaborUserUI extends HorizontalSplitPanel implements View {
         whateverButton.addStyleName(ValoTheme.MENU_ITEM);
         whateverButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         whateverButton.addClickListener(e -> {
-            Notification.show("Ez az elszámolásért felelős funkció... amúgy.");
+//            Notification.show("Ez az elszámolásért felelős funkció... amúgy.");
+//            settlementPage.clearFields();
+            setSecondComponent(settlementPage);
         });
 
         listOfEverythingButton.setIcon(VaadinIcons.ARCHIVE);
         listOfEverythingButton.addStyleName(ValoTheme.MENU_ITEM);
         listOfEverythingButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         listOfEverythingButton.addClickListener(e -> {
-            Notification.show("Itt majd mindent kilistázok ám.");
+//            Notification.show("Itt majd mindent kilistázok ám.");
+            setSecondComponent(listingPage);
         });
 
         logoutButton.setIcon(VaadinIcons.EXIT);

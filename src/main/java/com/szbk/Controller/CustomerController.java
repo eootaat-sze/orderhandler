@@ -63,4 +63,8 @@ public class CustomerController {
     public Customer findCustomerByEmail(String email) {
         return repo.findCustomerByEmail(email);
     }
+
+    public List<Customer> getAllCustomers() {
+        return repo.findAll();
+    }
 }
